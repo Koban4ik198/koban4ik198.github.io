@@ -1,8 +1,4 @@
 import { checkAuthState, logout, auth } from './auth-manager.js';
-// @ts-ignore
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
-
-const database = getDatabase();
 
 async function updateAuthUI() {
     const user = await checkAuthState();
@@ -10,24 +6,38 @@ async function updateAuthUI() {
     const userGreeting = document.getElementById('user-greeting');
     const accountLink = document.getElementById('account-link');
 
+    // Проверяем что кнопка существует
+    if (!authBtn) {
+        console.log('Кнопка auth-btn не найдена');
+        return;
+    }
+
     if (user) {
+        // Пользователь авторизован
         authBtn.textContent = 'Выйти';
         authBtn.onclick = handleLogout;
 
-        // Берем имя из localStorage или из email
-        // const name = localStorage.getItem('userName') || user.email.split('@')[0];
-        // userGreeting.textContent = `Привет, ${name}!`;
-        userGreeting.textContent = '';
-        userGreeting.style.display = 'none';
-        accountLink.style.display = 'inline';
-
-        // console.log('Показываем имя:', name);
+        // Безопасно работаем с элементами
+        if (userGreeting) {
+            userGreeting.textContent = '';
+            userGreeting.style.display = 'none';
+        }
+        if (accountLink) {
+            accountLink.style.display = 'inline';
+        }
 
     } else {
+        // Пользователь не авторизован
         authBtn.textContent = 'Вход';
         authBtn.onclick = handleLogin;
-        userGreeting.style.display = 'none';
-        accountLink.style.display = 'none';
+        
+        // Безопасно работаем с элементами
+        if (userGreeting) {
+            userGreeting.style.display = 'none';
+        }
+        if (accountLink) {
+            accountLink.style.display = 'none';
+        }
     }
 }
 

@@ -24,7 +24,8 @@ const database = getDatabase(app);
 
 async function loadMenuTemplate() {
     try {
-        const response = await fetch('templates/menu-item.html');
+        // ИСПРАВЛЕН ПУТЬ - добавил ../
+        const response = await fetch('../templates/menu-item.html');
         return await response.text();
     } catch (error) {
         console.error('Ошибка загрузки шаблона:', error);
